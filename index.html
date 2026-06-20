@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOC° — локальные события · Summer 26</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap');
+  :root{
+    --bg:#04100a; --bg2:#061712; --green:#1E7A45; --green-br:#36D67E; --teal:#1fa38c;
+    --green-deep:#0A2417; --green-line:#173a25; --white:#fff; --grey:#9fb3a7;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--white); overflow-x:hidden; cursor:default; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--green-br); color:#04100a; }
+
+  /* ===== переливающийся фон ===== */
+  .bgwrap{ position:fixed; inset:0; z-index:-2; overflow:hidden; background:var(--bg); }
+  .blob{ position:absolute; border-radius:50%; filter:blur(90px); opacity:.42; mix-blend-mode:screen; will-change:transform; }
+  .b1{ width:60vw; height:60vw; background:#1E7A45; left:-10vw; top:-15vw; animation:f1 22s ease-in-out infinite alternate; }
+  .b2{ width:55vw; height:55vw; background:#36D67E; right:-12vw; top:10vh; animation:f2 26s ease-in-out infinite alternate; }
+  .b3{ width:50vw; height:50vw; background:#1fa38c; left:20vw; bottom:-20vw; animation:f3 30s ease-in-out infinite alternate; }
+  .b4{ width:40vw; height:40vw; background:#0e9e57; right:10vw; bottom:0; animation:f1 24s ease-in-out infinite alternate-reverse; }
+  @keyframes f1{ 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(8vw,6vh) scale(1.15);} }
+  @keyframes f2{ 0%{transform:translate(0,0) scale(1.1);} 100%{transform:translate(-7vw,8vh) scale(.9);} }
+  @keyframes f3{ 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(6vw,-6vh) scale(1.2);} }
+  .bgtint{ position:fixed; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(2,9,5,.82), rgba(2,7,4,.93)); }
+  .grain{ position:fixed; inset:0; z-index:-1; opacity:.05; pointer-events:none; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* курсор-глоу */
+  .cursor-glow{ position:fixed; width:440px; height:440px; border-radius:50%; pointer-events:none; z-index:1;
+    background:radial-gradient(circle, rgba(54,214,126,.16), transparent 60%); transform:translate(-50%,-50%); mix-blend-mode:screen; will-change:transform; }
+  @media(hover:none){ .cursor-glow{ display:none; } }
+
+  /* ===== nav ===== */
+  nav{ position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
+       padding:18px 40px; backdrop-filter:blur(14px); background:rgba(4,16,10,.45); border-bottom:1px solid rgba(54,214,126,.12); }
+  .nav-logo{ font-family:'Unbounded'; font-weight:900; font-size:26px; letter-spacing:-1px; display:flex; align-items:flex-start; }
+  .nav-logo .sup{ font-size:13px; color:var(--green-br); margin-top:2px; margin-left:2px; }
+  .nav-links{ display:flex; gap:30px; font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+  .nav-links a{ color:var(--grey); transition:color .2s; }
+  .nav-links a:hover{ color:var(--green-br); }
+  .nav-cta{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; text-transform:uppercase; background:var(--green-br); color:#04100a; padding:11px 22px; border-radius:50px; font-weight:700; transition:transform .2s; }
+  .nav-cta:hover{ transform:translateY(-2px); }
+  @media(max-width:860px){ .nav-links{ display:none; } nav{ padding:16px 20px; } }
+
+  /* ===== верхняя бегущая строка (COMING SOON, обводка) ===== */
+  .topbar{ position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(3,11,7,.85); backdrop-filter:blur(8px); overflow:hidden; height:64px; display:flex; align-items:center; border-bottom:3px solid var(--green-br); }
+  .marq{ display:inline-flex; white-space:nowrap; animation:marq 16s linear infinite; }
+  .marq span{ font-family:'Unbounded',sans-serif; font-weight:900; font-size:30px; line-height:1; letter-spacing:3px; text-transform:uppercase; color:transparent; -webkit-text-stroke:1.4px var(--green-br); padding:0 24px; display:inline-flex; align-items:center; }
+  .marq span .st{ color:var(--green-br); -webkit-text-stroke:0; }
+  @keyframes marq{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+  @media(max-width:600px){ .topbar{ height:52px; } .marq span{ font-size:22px; letter-spacing:2px; padding:0 16px; -webkit-text-stroke:1.1px var(--green-br);} }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 40px; position:relative; z-index:2; }
+  @media(max-width:860px){ .wrap{ padding:0 20px; } }
+  section{ padding:120px 0; position:relative; scroll-margin-top:80px; }
+
+  /* ===== быстрая навигация около логотипа ===== */
+  .qnav{ display:flex; flex-wrap:wrap; gap:12px; margin-top:42px; }
+  .qchip{ font-family:'JetBrains Mono'; font-size:16px; letter-spacing:1px; text-transform:uppercase; padding:14px 26px;
+    border-radius:50px; border:1.5px solid rgba(54,214,126,.5); color:#dcece2; background:rgba(10,38,24,.4);
+    display:inline-flex; align-items:center; gap:9px; transition:transform .22s, border-color .22s, color .22s, box-shadow .22s, background .22s; }
+  .qchip::before{ content:'↗'; color:var(--green-br); font-size:14px; }
+  .qchip:hover{ border-color:var(--green-br); color:#fff; transform:translateY(-3px); box-shadow:0 10px 30px rgba(54,214,126,.22); }
+  .qchip.acc{ background:var(--green-br); color:#04100a; border-color:var(--green-br); font-weight:700; font-size:17px; }
+  .qchip.acc::before{ content:'★'; color:#04100a; }
+  .qchip.acc:hover{ background:#46e88c; box-shadow:0 12px 36px rgba(54,214,126,.4); }
+  @media(max-width:560px){ .qnav{ gap:9px; margin-top:34px; } .qchip{ font-size:14px; padding:12px 20px; } .qchip.acc{ font-size:14px; } }
+  .kk{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:5px; color:var(--green-br); text-transform:uppercase; display:flex; align-items:center; gap:14px; margin-bottom:26px; }
+  .kk::before{ content:''; width:38px; height:1px; background:var(--green-br); }
+  h2.sec{ font-family:'Unbounded'; font-weight:800; font-size:clamp(38px,5vw,70px); line-height:1; letter-spacing:-2px; margin-bottom:18px; }
+  h2.sec em{ font-style:normal; color:var(--green-br); }
+
+  .reveal{ opacity:0; transform:translateY(34px); transition:opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* ===== hero ===== */
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:120px; }
+  .hero .badge{ display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono'; font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--green-br); border:1px solid var(--green); border-radius:50px; padding:9px 20px; width:max-content; }
+  .hero .badge .dot{ width:8px; height:8px; border-radius:50%; background:var(--green-br); box-shadow:0 0 10px var(--green-br); animation:pulse 1.8s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+  .hero h1{ font-family:'Unbounded'; font-weight:900; font-size:clamp(72px,14vw,210px); line-height:.86; letter-spacing:-5px; margin:30px 0 8px; }
+  .hero h1 .sup{ font-size:.34em; color:var(--green-br); vertical-align:super; }
+  .hero .lead{ font-size:clamp(20px,2.4vw,30px); color:#cfe0d6; font-weight:300; max-width:760px; line-height:1.45; margin-top:14px; }
+  .hero .lead b{ color:var(--green-br); font-weight:600; }
+  .hero .btns{ display:flex; gap:16px; flex-wrap:wrap; margin-top:44px; }
+  .btn{ font-family:'JetBrains Mono'; font-size:14px; letter-spacing:1px; text-transform:uppercase; padding:18px 34px; border-radius:50px; font-weight:700; transition:transform .2s, box-shadow .2s; }
+  .btn.primary{ background:var(--green-br); color:#04100a; }
+  .btn.primary:hover{ transform:translateY(-3px); box-shadow:0 14px 36px rgba(54,214,126,.3); }
+  .btn.ghost{ border:1px solid var(--green); color:#fff; }
+  .btn.ghost:hover{ border-color:var(--green-br); color:var(--green-br); transform:translateY(-3px); }
+  .scrollhint{ position:absolute; bottom:34px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono'; font-size:11px; letter-spacing:3px; color:var(--grey); text-transform:uppercase; }
+
+  /* ===== about stats ===== */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:50px; border-top:1px solid var(--green-line); border-bottom:1px solid var(--green-line); }
+  .stat{ padding:30px 22px; border-right:1px solid var(--green-line); }
+  .stat:last-child{ border-right:none; }
+  .stat .n{ font-family:'Unbounded'; font-weight:900; font-size:44px; color:var(--green-br); line-height:1; }
+  .stat .l{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:2px; color:var(--grey); text-transform:uppercase; margin-top:10px; }
+  @media(max-width:680px){ .stats{ grid-template-columns:1fr 1fr; } .stat:nth-child(2){border-right:none;} }
+  .about-lead{ font-size:clamp(20px,2.5vw,30px); font-weight:300; color:#dcece2; line-height:1.5; max-width:900px; }
+  .about-lead b{ color:#fff; font-weight:600; }
+
+  /* ===== schedule ===== */
+  .sched{ margin-top:20px; }
+  .sched-note{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; color:var(--green-br); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .sched-note::before{ content:'●'; font-size:8px; }
+  .ev{ display:grid; grid-template-columns:130px 1fr auto 34px; align-items:center; gap:20px; padding:22px 0; border-top:1px solid var(--green-line); transition:padding-left .3s, background .3s; cursor:pointer; }
+  .ev:last-child{ border-bottom:1px solid var(--green-line); }
+  .ev:hover{ padding-left:14px; background:linear-gradient(90deg, rgba(54,214,126,.08), transparent); }
+  .ev .d{ font-family:'Unbounded'; font-weight:800; font-size:26px; letter-spacing:-1px; }
+  .ev .d small{ display:block; font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:var(--grey); margin-top:3px; }
+  .ev .name{ font-family:'Unbounded'; font-weight:700; font-size:clamp(22px,3vw,34px); text-transform:uppercase; letter-spacing:-1px; }
+  .ev .name span{ display:block; font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; text-transform:none; color:var(--green-br); font-weight:500; margin-top:4px; }
+  .ev .tag{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#04100a; background:var(--green-br); border-radius:30px; padding:7px 14px; white-space:nowrap; }
+  .ev .go{ font-size:24px; color:var(--green-br); justify-self:end; transition:transform .25s; }
+  .ev:hover .go{ transform:translateX(5px); }
+  .ev.hl .d, .ev.hl .name{ color:var(--green-br); }
+  @media(max-width:680px){ .ev{ grid-template-columns:84px 1fr 26px; } .ev .tag{ display:none; } .ev .d{ font-size:22px; } .ev .go{ font-size:20px; } }
+
+  /* модалка события */
+  .modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(2,7,4,.7); backdrop-filter:blur(8px); }
+  .modal.open{ display:flex; animation:fade .25s ease; }
+  @keyframes fade{ from{opacity:0;} to{opacity:1;} }
+  .mcard{ width:min(560px,100%); background:linear-gradient(160deg, #0c2a1c, #050d09); border:1px solid var(--green); border-radius:24px; padding:42px; position:relative; box-shadow:0 30px 80px rgba(0,0,0,.6); animation:pop .3s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes pop{ from{opacity:0; transform:translateY(20px) scale(.97);} to{opacity:1; transform:none;} }
+  .mclose{ position:absolute; top:20px; right:22px; width:40px; height:40px; border-radius:50%; border:1px solid var(--green-line); background:rgba(0,0,0,.3); color:#cfe0d6; font-size:20px; cursor:pointer; transition:all .2s; }
+  .mclose:hover{ border-color:var(--green-br); color:#fff; }
+  .mdate{ font-family:'JetBrains Mono'; font-size:14px; letter-spacing:3px; color:var(--green-br); text-transform:uppercase; }
+  .mtitle{ font-family:'Unbounded'; font-weight:800; font-size:46px; letter-spacing:-2px; text-transform:uppercase; margin:12px 0 18px; line-height:1; }
+  .mmeta{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+  .mmeta span{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; border:1px solid var(--green-line); border-radius:50px; padding:8px 16px; color:#cfe0d6; }
+  .mdesc{ font-size:18px; line-height:1.55; color:#dcece2; font-weight:300; margin-bottom:30px; }
+  .mbtns{ display:flex; gap:12px; flex-wrap:wrap; }
+  @media(max-width:520px){ .mcard{ padding:30px 24px; } .mtitle{ font-size:34px; } }
+
+  /* ===== gallery ===== */
+  .gal{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:20px; }
+  .tile{ aspect-ratio:4/5; border-radius:18px; position:relative; overflow:hidden; border:1px solid var(--green-line);
+         background:linear-gradient(160deg, var(--green-deep), #050d09); display:flex; align-items:flex-end; padding:26px; transition:transform .35s, box-shadow .35s; }
+  .tile::before{ content:''; position:absolute; inset:0; background:radial-gradient(60% 50% at 50% 30%, rgba(54,214,126,.22), transparent 70%); opacity:.7; transition:opacity .35s; }
+  .tile:hover{ transform:translateY(-8px); box-shadow:0 24px 50px rgba(0,0,0,.5); }
+  .tile:hover::before{ opacity:1; }
+  .tile .t{ position:relative; z-index:2; }
+  .tile .t .nm{ font-family:'Unbounded'; font-weight:700; font-size:26px; text-transform:uppercase; }
+  .tile .t .ph{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:2px; color:var(--grey); text-transform:uppercase; margin-top:6px; }
+  .tile .num{ position:absolute; top:22px; left:26px; font-family:'JetBrains Mono'; font-size:12px; color:var(--green-br); z-index:2; letter-spacing:1px; }
+  .gal-note{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:1px; color:#3a5446; text-transform:uppercase; margin-top:18px; }
+  @media(max-width:860px){ .gal{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:520px){ .gal{ grid-template-columns:1fr; } }
+
+  /* ===== order private ===== */
+  .order{ background:linear-gradient(140deg, var(--green-deep), rgba(5,13,9,.6)); border:1px solid var(--green); border-radius:28px; padding:clamp(36px,5vw,64px); position:relative; overflow:hidden; }
+  .order::after{ content:''; position:absolute; right:-80px; bottom:-80px; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(54,214,126,.18), transparent 70%); }
+  .order h2{ font-family:'Unbounded'; font-weight:800; font-size:clamp(32px,4.4vw,58px); line-height:1.02; letter-spacing:-2px; }
+  .order h2 em{ font-style:normal; color:var(--green-br); }
+  .order p{ font-size:clamp(18px,2.2vw,24px); color:#cfe0d6; font-weight:300; max-width:680px; margin-top:20px; line-height:1.5; }
+  .order .tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; }
+  .order .tags span{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; border:1px solid var(--green); border-radius:50px; padding:9px 18px; color:#dcece2; }
+  .order .btns{ display:flex; gap:14px; flex-wrap:wrap; margin-top:34px; position:relative; z-index:2; }
+
+  /* ===== contacts ===== */
+  .cont-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:50px; margin-top:20px; align-items:center; }
+  .cont-card{ border:1px solid var(--green-line); border-radius:20px; padding:30px 32px; background:rgba(10,36,23,.35); margin-bottom:16px; transition:transform .3s, border-color .3s; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .cont-card:hover{ transform:translateX(8px); border-color:var(--green); }
+  .cont-card .lbl{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:var(--grey); text-transform:uppercase; }
+  .cont-card .val{ font-family:'Unbounded'; font-weight:700; font-size:clamp(20px,2.4vw,28px); margin-top:6px; }
+  .cont-card .arrow{ font-size:30px; color:var(--green-br); }
+  .cont-side .big{ font-family:'Unbounded'; font-weight:900; font-size:clamp(40px,6vw,86px); line-height:.9; letter-spacing:-3px; }
+  .cont-side .big .g{ color:var(--green-br); }
+  .cont-side p{ color:var(--grey); font-weight:300; font-size:18px; margin-top:18px; line-height:1.5; }
+  @media(max-width:860px){ .cont-grid{ grid-template-columns:1fr; gap:24px; } }
+
+  footer{ border-top:1px solid var(--green-line); padding:40px 0; margin-top:40px; }
+  .foot-in{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:#3a5446; text-transform:uppercase; }
+  .foot-in .l{ color:var(--green-br); }
+
+  /* ===== адаптация под телефон ===== */
+  @media(max-width:600px){
+    section{ padding:78px 0; }
+    .hero{ min-height:auto; padding-top:108px; padding-bottom:56px; }
+    .hero h1{ letter-spacing:-3px; }
+    .hero .lead br{ display:none; }
+    .scrollhint{ display:none; }
+    .kk{ letter-spacing:3px; }
+    .stat{ padding:24px 16px; } .stat .n{ font-size:36px; }
+    .ev{ gap:12px; padding:18px 0; }
+    .ev .name span{ font-size:11px; }
+    .order{ border-radius:22px; }
+    .cont-card{ padding:22px 22px; }
+    .foot-in{ justify-content:center; text-align:center; gap:10px; }
+  }
+  @media(max-width:380px){
+    .wrap{ padding:0 16px; }
+    .btn{ padding:15px 24px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bgwrap">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+</div>
+<div class="bgtint"></div>
+<div class="grain"></div>
+<div class="cursor-glow" id="glow"></div>
+
+<a href="#schedule" class="topbar" aria-label="Скоро">
+  <div class="marq">
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+    <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
+  </div>
+</a>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="badge reveal in"><span class="dot"></span> Локальные события · с 2024</div>
+    <h1 class="reveal in">SOC<span class="sup">26</span></h1>
+    <p class="lead reveal in">Квизы, игры и вечеринки в нашем городе.<br><b>Summer 26</b> — самый громкий сезон. Стартуем 20 июля.</p>
+    <div class="qnav reveal in">
+      <a href="#schedule" class="qchip acc">Расписание</a>
+      <a href="#order" class="qchip acc">Заказать ивент</a>
+      <a href="#about" class="qchip">О нас</a>
+      <a href="#gallery" class="qchip">Галерея</a>
+      <a href="#contacts" class="qchip">Контакты</a>
+    </div>
+  </div>
+  <div class="scrollhint">↓ листай вниз</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="kk reveal">Кто мы</div>
+    <h2 class="sec reveal">Команда, которая <em>собирает людей.</em></h2>
+    <p class="about-lead reveal">Мы — молодая команда из нашего города. Организуем <b>квизы, игры, вечеринки и события</b>, которых здесь не хватает. Делаем всё сами — от идеи до площадки.</p>
+    <div class="stats reveal">
+      <div class="stat"><div class="n">2024</div><div class="l">Работаем с</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Событий за сезон</div></div>
+      <div class="stat"><div class="n">3+</div><div class="l">Формата событий</div></div>
+      <div class="stat"><div class="n">∞</div><div class="l">Хорошего настроения</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="wrap">
+    <div class="kk reveal">Главное событие сезона</div>
+    <h2 class="sec reveal">Расписание <em>Summer 26</em></h2>
+    <div class="sched-note reveal">жми на событие — детали и запись</div>
+    <div class="sched reveal">
+      <div class="ev hl" data-i="0"><div class="d">20.07<small>Пн</small></div><div class="name">Тусовка<span>открытие сезона</span></div><div class="tag">Старт</div><span class="go">→</span></div>
+      <div class="ev" data-i="1"><div class="d">25.07<small>Сб</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="2"><div class="d">30.07<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="3"><div class="d">01.08<small>Сб</small></div><div class="name">Киновечер</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="4"><div class="d">06.08<small>Чт</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="5"><div class="d">08.08<small>Сб</small></div><div class="name">Опен аир</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="6"><div class="d">13.08<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div>
+      <div class="ev" data-i="7"><div class="d">15.08<small>Сб</small></div><div class="name">Шашлыки</div><div></div><span class="go">→</span></div>
+      <div class="ev hl" data-i="8"><div class="d">20.08<small>Чт</small></div><div class="name">Стендап</div><div class="tag">Финал</div><span class="go">→</span></div>
+      <div class="ev hl" data-i="9"><div class="d">20.08<small>Чт</small></div><div class="name">Афтерпати</div><div class="tag">Афтер</div><span class="go">→</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="wrap">
+    <div class="kk reveal">Как это было</div>
+    <h2 class="sec reveal">Галерея <em>событий</em></h2>
+    <div class="gal reveal">
+      <div class="tile"><span class="num">// 01</span><div class="t"><div class="nm">Квиз</div><div class="ph">+ фото</div></div></div>
+      <div class="tile"><span class="num">// 02</span><div class="t"><div class="nm">Тусовка</div><div class="ph">+ фото</div></div></div>
+      <div class="tile"><span class="num">// 03</span><div class="t"><div class="nm">Игра</div><div class="ph">+ фото</div></div></div>
+      <div class="tile"><span class="num">// 04</span><div class="t"><div class="nm">Опен аир</div><div class="ph">+ фото</div></div></div>
+      <div class="tile"><span class="num">// 05</span><div class="t"><div class="nm">Киновечер</div><div class="ph">+ фото</div></div></div>
+      <div class="tile"><span class="num">// 06</span><div class="t"><div class="nm">Стендап</div><div class="ph">+ фото</div></div></div>
+    </div>
+    <div class="gal-note reveal">плейсхолдеры — заменим на реальные фото прошлых событий</div>
+  </div>
+</section>
+
+<!-- ORDER PRIVATE -->
+<section id="order">
+  <div class="wrap">
+    <div class="order reveal">
+      <div class="kk" style="margin-bottom:18px;">Частное мероприятие</div>
+      <h2>Своё событие <em>под ключ.</em></h2>
+      <p>Проведём квиз, праздник, корпоратив или день рождения в нашем фирменном стиле. Берём организацию на себя — вам остаётся прийти и веселиться.</p>
+      <div class="tags"><span>Квиз на заказ</span><span>День рождения</span><span>Корпоратив</span><span>Тематическая вечеринка</span></div>
+      <div class="btns">
+        <a href="https://t.me/SocEvents" target="_blank" class="btn primary">Написать в Телеграм</a>
+        <a href="tel:+79247698050" class="btn ghost">Позвонить</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts">
+  <div class="wrap">
+    <div class="cont-grid">
+      <div class="reveal">
+        <div class="kk">Контакты</div>
+        <a href="https://t.me/SocEvents" target="_blank" class="cont-card"><div><div class="lbl">Телеграм-канал</div><div class="val">t.me/SocEvents</div></div><div class="arrow">↗</div></a>
+        <a href="tel:+79247698050" class="cont-card"><div><div class="lbl">Рашид</div><div class="val">+7 924 769-80-50</div></div><div class="arrow">↗</div></a>
+        <a href="tel:+79245459393" class="cont-card"><div><div class="lbl">Алексей</div><div class="val">+7 924 545-93-93</div></div><div class="arrow">↗</div></a>
+      </div>
+      <div class="cont-side reveal">
+        <div class="big">Город + <span class="g">SOC.</span></div>
+        <p>Подписывайся на канал, чтобы не пропустить анонсы сезона. По вопросам и заказу мероприятий — звони или пиши, ответим быстро.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL события -->
+<div class="modal" id="modal">
+  <div class="mcard">
+    <button class="mclose" id="mclose" aria-label="Закрыть">✕</button>
+    <div class="mdate" id="mdate"></div>
+    <div class="mtitle" id="mtitle"></div>
+    <div class="mmeta" id="mmeta"></div>
+    <div class="mdesc" id="mdesc"></div>
+    <div class="mbtns">
+      <a href="https://t.me/SocEvents" target="_blank" class="btn primary">Записаться</a>
+      <a href="https://t.me/SocEvents" target="_blank" class="btn ghost">В Телеграм-канал</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-in">
+    <span class="l">SOC° · Локальные события</span>
+    <span>Summer 26 · с 20.07 по 20.08</span>
+    <span>© 2026 SOC</span>
+  </div>
+</footer>
+
+<script>
+  // курсор-глоу (белый, простой)
+  const glow=document.getElementById('glow');
+  let mx=innerWidth/2, my=innerHeight/2, cx=mx, cy=my;
+  addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; });
+  (function loop(){ cx+=(mx-cx)*.38; cy+=(my-cy)*.38; glow.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+
+  // reveal on scroll
+  const io=new IntersectionObserver((es)=>{ es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} }); },{ threshold:.14 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // ===== модалка событий =====
+  const EVENTS=[
+    {date:'20 июля · Пн', name:'Тусовка', time:'19:00', place:'место в анонсе', desc:'Большое открытие сезона Summer 26. Музыка, знакомства и атмосфера старта — задаём настроение на весь месяц.'},
+    {date:'25 июля · Сб', name:'Квиз', time:'18:00', place:'место в анонсе', desc:'Командная интеллектуальная игра. Собирай команду 4–6 человек, проверь эрудицию и поборись за приз.'},
+    {date:'30 июля · Чт', name:'Игра', time:'19:00', place:'место в анонсе', desc:'Активная городская игра — формат каждый раз новый. Динамично, весело и всегда неожиданно.'},
+    {date:'1 августа · Сб', name:'Киновечер', time:'21:00', place:'под открытым небом', desc:'Совместный просмотр кино под открытым небом. Большой экран, плед и хорошая компания.'},
+    {date:'6 августа · Чт', name:'Квиз', time:'18:00', place:'место в анонсе', desc:'Ещё один вечер умных вопросов и азартных команд. Реванш для тех, кто хочет взять верх.'},
+    {date:'8 августа · Сб', name:'Опен аир', time:'17:00', place:'на свежем воздухе', desc:'Вечеринка на свежем воздухе. Музыка, лето и свои люди — то, ради чего стоит выйти из дома.'},
+    {date:'13 августа · Чт', name:'Игра', time:'19:00', place:'место в анонсе', desc:'Новый раунд городской игры. Командный дух, движение и хорошее настроение.'},
+    {date:'15 августа · Сб', name:'Шашлыки', time:'15:00', place:'выезд на природу', desc:'Дружеский выезд на природу. Мясо на углях, музыка и общение в кругу своих.'},
+    {date:'20 августа · Чт', name:'Стендап', time:'20:00', place:'место в анонсе', desc:'Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой.'},
+    {date:'20 августа · Чт', name:'Афтерпати', time:'23:00', place:'место в анонсе', desc:'Закрытие сезона сразу после стендапа. Танцуем до утра и прощаемся с летом как следует.'}
+  ];
+  const modal=document.getElementById('modal');
+  const mClose=document.getElementById('mclose');
+  function openEv(i){
+    const e=EVENTS[i]; if(!e) return;
+    document.getElementById('mdate').textContent=e.date;
+    document.getElementById('mtitle').textContent=e.name;
+    document.getElementById('mmeta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';
+    document.getElementById('mdesc').textContent=e.desc;
+    modal.classList.add('open');
+  }
+  function closeEv(){ modal.classList.remove('open'); }
+  document.querySelectorAll('.ev').forEach(ev=>ev.addEventListener('click',()=>openEv(+ev.dataset.i)));
+  mClose.addEventListener('click',closeEv);
+  modal.addEventListener('click',e=>{ if(e.target===modal) closeEv(); });
+  addEventListener('keydown',e=>{ if(e.key==='Escape') closeEv(); });
+</script>
+</body>
+</html>
