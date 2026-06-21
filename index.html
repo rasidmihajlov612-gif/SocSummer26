@@ -139,7 +139,7 @@
 
 
 <div class="bgwrap"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
-<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1314.37px, 774.137px) translate(-50%, -50%);"></div>
+<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1230px, 737.997px) translate(-50%, -50%);"></div>
 
 <a href="#schedule" class="topbar"><div class="marq">
   <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
@@ -151,7 +151,7 @@
 </div></a>
 
 <section class="hero" id="top"><div class="wrap">
-  <div class="badge reveal"><span class="dot"></span> Локальные события · с 2024</div>
+  <div class="badge reveal"> Локальные события · с 2024</div>
   <h1 class="reveal">SOC<span class="sup">26</span></h1>
   <p class="lead reveal">Квизы, игры и вечеринки в нашем городе.<br><b>Summer 26</b> — самый громкий сезон. Стартуем 20 июля.</p>
   <div class="qnav reveal">
@@ -248,7 +248,7 @@ addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
 (function loop(){cx+=(mx-cx)*.38;cy+=(my-cy)*.38;glow.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
 var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.14});
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-var EVENTS=[{"date":"20 августа · Чт","name":"Просмотр финала Чм-26","time":"03:00","place":"место в анонсе","desc":"Совместный просмотр финала ЧМ-26. Живые эмоции , компания и чистый кайф от красивого футбола . 18+ "}];
+var EVENTS=[{"date":"20 августа · Чт","name":"Просмотр финала Чм-26","time":"03:00","place":"место в анонсе","desc":"Совместный просмотр финала ЧМ-26. Живые эмоции "}];
 var modal=document.getElementById('modal');var mClose=document.getElementById('mclose');
 function openEv(i){var e=EVENTS[i];if(!e)return;document.getElementById('mdate').textContent=e.date;document.getElementById('mtitle').textContent=e.name;document.getElementById('mmeta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';document.getElementById('mdesc').textContent=e.desc;modal.classList.add('open');}
 function closeEv(){modal.classList.remove('open');}
