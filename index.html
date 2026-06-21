@@ -139,7 +139,7 @@
 
 
 <div class="bgwrap"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
-<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1249.48px, 763.148px) translate(-50%, -50%);"></div>
+<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1341.04px, 761.996px) translate(-50%, -50%);"></div>
 
 <a href="#schedule" class="topbar"><div class="marq">
   <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
@@ -169,8 +169,8 @@
   <p class="about-lead reveal">Мы — молодая команда из нашего города. Организуем <b>квизы, игры, вечеринки и события</b>, которых здесь не хватает. Делаем всё сами — от идеи до площадки.</p>
   <div class="stats reveal">
     <div class="stat"><div class="n">2024</div><div class="l">Работаем с</div></div>
-    <div class="stat"><div class="n">10</div><div class="l">Событий за сезон</div></div>
-    <div class="stat"><div class="n">3+</div><div class="l">Формата событий</div></div>
+    <div class="stat"><div class="n">15+</div><div class="l">Событий за сезон</div></div>
+    <div class="stat"><div class="n">4+</div><div class="l">Формата событий</div></div>
     <div class="stat"><div class="n">∞</div><div class="l">Хорошего настроения</div></div>
   </div>
 </div></section>
@@ -179,7 +179,7 @@
   <div class="kk reveal">Главное событие сезона</div>
   <h2 class="sec reveal">Расписание <em>Summer 26</em></h2>
   <div class="sched-note reveal">жми на событие — детали и запись</div>
-  <div class="sched reveal"><div class="ev hl" data-i="0"><div class="d">20.07<small>Пн</small></div><div class="name">Тусовка<span>открытие сезона</span></div><div class="tag">Старт</div><span class="go">→</span></div><div class="ev" data-i="1"><div class="d">25.07<small>Сб</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="2"><div class="d">30.07<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="3"><div class="d">01.08<small>Сб</small></div><div class="name">Киновечер</div><div></div><span class="go">→</span></div><div class="ev" data-i="4"><div class="d">06.08<small>Чт</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="5"><div class="d">08.08<small>Сб</small></div><div class="name">Опен аир</div><div></div><span class="go">→</span></div><div class="ev" data-i="6"><div class="d">13.08<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="7"><div class="d">15.08<small>Сб</small></div><div class="name">Шашлыки</div><div></div><span class="go">→</span></div><div class="ev hl" data-i="8"><div class="d">20.08<small>Чт</small></div><div class="name">Стендап</div><div class="tag">Финал</div><span class="go">→</span></div><div class="ev hl" data-i="9"><div class="d">20.08<small>Чт</small></div><div class="name">Афтерпати</div><div class="tag">Афтер</div><span class="go">→</span></div><div class="ev" data-i="10"><div class="d">19.07<small></small></div><div class="name">выыва событие</div><div></div><span class="go">→</span></div></div>
+  <div class="sched reveal"><div class="ev hl" data-i="0"><div class="d">19.07<small>Вск</small></div><div class="name">Финал чм</div><div class="tag">Финал</div><span class="go">→</span></div></div>
   
   
 </div></section>
@@ -248,7 +248,7 @@ addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
 (function loop(){cx+=(mx-cx)*.38;cy+=(my-cy)*.38;glow.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
 var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.14});
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-var EVENTS=[{"date":"20 июля · Пн","name":"Тусовка","time":"19:00","place":"место в анонсе","desc":"Большое открытие сезона Summer 26. Музыка, знакомства и атмосфера старта — задаём настроение на весь месяц."},{"date":"25 июля · Сб","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Командная интеллектуальная игра. Собирай команду 4–6 человек, проверь эрудицию и поборись за приз."},{"date":"30 июля · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Активная городская игра — формат каждый раз новый. Динамично, весело и всегда неожиданно."},{"date":"1 августа · Сб","name":"Киновечер","time":"21:00","place":"под открытым небом","desc":"Совместный просмотр кино под открытым небом. Большой экран, плед и хорошая компания."},{"date":"6 августа · Чт","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Ещё один вечер умных вопросов и азартных команд. Реванш для тех, кто хочет взять верх."},{"date":"8 августа · Сб","name":"Опен аир","time":"17:00","place":"на свежем воздухе","desc":"Вечеринка на свежем воздухе. Музыка, лето и свои люди — то, ради чего стоит выйти из дома."},{"date":"13 августа · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Новый раунд городской игры. Командный дух, движение и хорошее настроение."},{"date":"15 августа · Сб","name":"Шашлыки","time":"15:00","place":"выезд на природу","desc":"Дружеский выезд на природу. Мясо на углях, музыка и общение в кругу своих."},{"date":"20 августа · Чт","name":"Стендап","time":"20:00","place":"место в анонсе","desc":"Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой."},{"date":"20 августа · Чт","name":"Афтерпати","time":"23:00","place":"место в анонсе","desc":"Закрытие сезона сразу после стендапа. Танцуем до утра и прощаемся с летом как следует."},{"date":"19.07 · ","name":"выыва событие","time":"19:00","place":"место в анонсе","desc":"Описание события."}];
+var EVENTS=[{"date":"20 августа · Чт","name":"Финал чм","time":"20:00","place":"место в анонсе","desc":"Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой."}];
 var modal=document.getElementById('modal');var mClose=document.getElementById('mclose');
 function openEv(i){var e=EVENTS[i];if(!e)return;document.getElementById('mdate').textContent=e.date;document.getElementById('mtitle').textContent=e.name;document.getElementById('mmeta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';document.getElementById('mdesc').textContent=e.desc;modal.classList.add('open');}
 function closeEv(){modal.classList.remove('open');}
