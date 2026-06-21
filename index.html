@@ -78,7 +78,28 @@
   .ev .tag{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#04100a; background:var(--green-br); border-radius:30px; padding:7px 14px; white-space:nowrap; }
   .ev .go{ font-size:24px; color:var(--green-br); justify-self:end; }
   .ev.hl .d, .ev.hl .name{ color:var(--green-br); }
+  .ev{ cursor:pointer; transition:padding-left .3s, background .3s; }
+  .ev:hover{ padding-left:14px; background:linear-gradient(90deg, rgba(54,214,126,.08), transparent); }
+  .ev .go{ transition:transform .25s; }
+  .ev:hover .go{ transform:translateX(5px); }
   @media(max-width:680px){ .ev{ grid-template-columns:84px 1fr 26px; } .ev .tag{ display:none; } .ev .d{ font-size:22px; } .ev .go{ font-size:20px; } }
+
+  /* модалка события (нужна в итоговом сайте) */
+  .modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(2,7,4,.7); backdrop-filter:blur(8px); }
+  .modal.open{ display:flex; animation:fade .25s ease; }
+  @keyframes fade{ from{opacity:0;} to{opacity:1;} }
+  .mcard{ width:min(560px,100%); background:linear-gradient(160deg, #0c2a1c, #050d09); border:1px solid var(--green); border-radius:24px; padding:42px; position:relative; box-shadow:0 30px 80px rgba(0,0,0,.6); animation:pop .3s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes pop{ from{opacity:0; transform:translateY(20px) scale(.97);} to{opacity:1; transform:none;} }
+  .mclose{ position:absolute; top:20px; right:22px; width:40px; height:40px; border-radius:50%; border:1px solid var(--green-line); background:rgba(0,0,0,.3); color:#cfe0d6; font-size:20px; cursor:pointer; transition:all .2s; }
+  .mclose:hover{ border-color:var(--green-br); color:#fff; }
+  .mdate{ font-family:'JetBrains Mono'; font-size:14px; letter-spacing:3px; color:var(--green-br); text-transform:uppercase; }
+  .mtitle{ font-family:'Unbounded'; font-weight:800; font-size:46px; letter-spacing:-2px; text-transform:uppercase; margin:12px 0 18px; line-height:1; }
+  .mmeta{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+  .mmeta span{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; border:1px solid var(--green-line); border-radius:50px; padding:8px 16px; color:#cfe0d6; }
+  .mdesc{ font-size:18px; line-height:1.55; color:#dcece2; font-weight:300; margin-bottom:30px; }
+  .mbtns{ display:flex; gap:12px; flex-wrap:wrap; }
+  @media(max-width:520px){ .mcard{ padding:30px 24px; } .mtitle{ font-size:34px; } }
+
   .flow{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:20px; }
   .step{ position:relative; padding-right:26px; }
   .step:not(:last-child)::after{ content:'→'; position:absolute; right:0; top:18px; transform:translateX(50%); color:var(--green-br); font-size:28px; }
@@ -118,7 +139,7 @@
 
 
 <div class="bgwrap"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
-<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1243px, 758.976px) translate(-50%, -50%);"></div>
+<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1307.84px, 772.796px) translate(-50%, -50%);"></div>
 
 <a href="#schedule" class="topbar"><div class="marq">
   <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
@@ -148,8 +169,8 @@
   <p class="about-lead reveal">Мы — молодая команда из нашего города. Организуем <b>квизы, игры, вечеринки и события</b>, которых здесь не хватает. Делаем всё сами — от идеи до площадки.</p>
   <div class="stats reveal">
     <div class="stat"><div class="n">2024</div><div class="l">Работаем с</div></div>
-    <div class="stat"><div class="n">15+</div><div class="l">Событий за сезон</div></div>
-    <div class="stat"><div class="n">4+</div><div class="l">Формата событий</div></div>
+    <div class="stat"><div class="n">10</div><div class="l">Событий за сезон</div></div>
+    <div class="stat"><div class="n">3+</div><div class="l">Формата событий</div></div>
     <div class="stat"><div class="n">∞</div><div class="l">Хорошего настроения</div></div>
   </div>
 </div></section>
@@ -158,7 +179,7 @@
   <div class="kk reveal">Главное событие сезона</div>
   <h2 class="sec reveal">Расписание <em>Summer 26</em></h2>
   <div class="sched-note reveal">жми на событие — детали и запись</div>
-  <div class="sched reveal"><div class="ev" data-i="0"><div class="d">19.07<small>ВСК</small></div><div class="name">Просмотр Финала ЧМ-26</div><div></div><span class="go">→</span></div><div class="ev hl" data-i="1"><div class="d">20.07<small>Пн</small></div><div class="name">Тусовка<span>открытие сезона</span></div><div class="tag">Старт</div><span class="go">→</span></div><div class="ev" data-i="2"><div class="d">25.07<small>Сб</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="3"><div class="d">30.07<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="4"><div class="d">01.08<small>Сб</small></div><div class="name">Киновечер</div><div></div><span class="go">→</span></div><div class="ev" data-i="5"><div class="d">06.08<small>Чт</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="6"><div class="d">08.08<small>Сб</small></div><div class="name">Опен аир</div><div></div><span class="go">→</span></div><div class="ev" data-i="7"><div class="d">13.08<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="8"><div class="d">15.08<small>Сб</small></div><div class="name">Шашлыки</div><div></div><span class="go">→</span></div><div class="ev hl" data-i="9"><div class="d">20.08<small>Чт</small></div><div class="name">Стендап</div><div class="tag">Финал</div><span class="go">→</span></div><div class="ev hl" data-i="10"><div class="d">20.08<small>Чт</small></div><div class="name">Афтерпати</div><div class="tag">Афтер</div><span class="go">→</span></div></div>
+  <div class="sched reveal"><div class="ev hl" data-i="0"><div class="d">19.07<small>ВСК</small></div><div class="name">Просмотр Финала ЧМ-26</div><div></div><span class="go">→</span></div><div class="ev hl" data-i="1"><div class="d">20.07<small>Пн</small></div><div class="name">Тусовка<span>открытие сезона</span></div><div class="tag">Старт</div><span class="go">→</span></div><div class="ev" data-i="2"><div class="d">25.07<small>Сб</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="3"><div class="d">30.07<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="4"><div class="d">01.08<small>Сб</small></div><div class="name">Киновечер</div><div></div><span class="go">→</span></div><div class="ev" data-i="5"><div class="d">06.08<small>Чт</small></div><div class="name">Квиз</div><div></div><span class="go">→</span></div><div class="ev" data-i="6"><div class="d">08.08<small>Сб</small></div><div class="name">Опен аир</div><div></div><span class="go">→</span></div><div class="ev" data-i="7"><div class="d">13.08<small>Чт</small></div><div class="name">Игра</div><div></div><span class="go">→</span></div><div class="ev" data-i="8"><div class="d">15.08<small>Сб</small></div><div class="name">Шашлыки</div><div></div><span class="go">→</span></div><div class="ev hl" data-i="9"><div class="d">20.08<small>Чт</small></div><div class="name">Стендап</div><div class="tag">Финал</div><span class="go">→</span></div><div class="ev hl" data-i="10"><div class="d">20.08<small>Чт</small></div><div class="name">Афтерпати</div><div class="tag">Афтер</div><span class="go">→</span></div></div>
   
   
 </div></section>
@@ -174,7 +195,7 @@
   </div>
   <div class="how-cta reveal">
     <div class="t">Хочешь событие <span>только для своих?</span></div>
-    <a href="#order" class="btn primary">Заказать мероприятие</a>
+    <a href="#order" class="btn primary">Заказать мероприятие!</a>
   </div>
 </div></section>
 
@@ -225,7 +246,7 @@ addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
 (function loop(){cx+=(mx-cx)*.38;cy+=(my-cy)*.38;glow.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
 var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.14});
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-var EVENTS=[{"date":"19.07","name":"Просмотр Финала ЧМ-26","time":"03:00","place":"место в анонсе","desc":"Совместный просмотр финала чм26 "},{"date":"20 июля · Пн","name":"Тусовка","time":"19:00","place":"место в анонсе","desc":"Большое открытие сезона Summer 26. Музыка, знакомства и атмосфера старта — задаём настроение на весь месяц."},{"date":"25 июля · Сб","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Командная интеллектуальная игра. Собирай команду 4–6 человек, проверь эрудицию и поборись за приз."},{"date":"30 июля · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Активная городская игра — формат каждый раз новый. Динамично, весело и всегда неожиданно."},{"date":"1 августа · Сб","name":"Киновечер","time":"21:00","place":"под открытым небом","desc":"Совместный просмотр кино под открытым небом. Большой экран, плед и хорошая компания."},{"date":"6 августа · Чт","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Ещё один вечер умных вопросов и азартных команд. Реванш для тех, кто хочет взять верх."},{"date":"8 августа · Сб","name":"Опен аир","time":"17:00","place":"на свежем воздухе","desc":"Вечеринка на свежем воздухе. Музыка, лето и свои люди — то, ради чего стоит выйти из дома."},{"date":"13 августа · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Новый раунд городской игры. Командный дух, движение и хорошее настроение."},{"date":"15 августа · Сб","name":"Шашлыки","time":"15:00","place":"выезд на природу","desc":"Дружеский выезд на природу. Мясо на углях, музыка и общение в кругу своих."},{"date":"20 августа · Чт","name":"Стендап","time":"20:00","place":"место в анонсе","desc":"Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой."},{"date":"20 августа · Чт","name":"Афтерпати","time":"23:00","place":"место в анонсе","desc":"Закрытие сезона сразу после стендапа. Танцуем до утра и прощаемся с летом как следует."}];
+var EVENTS=[{"date":"19.07","name":"Просмотр Финала ЧМ-26","time":"13:00","place":"место в анонсе","desc":"Описание события."},{"date":"20 июля · Пн","name":"Тусовка","time":"19:00","place":"место в анонсе","desc":"Большое открытие сезона Summer 26. Музыка, знакомства и атмосфера старта — задаём настроение на весь месяц."},{"date":"25 июля · Сб","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Командная интеллектуальная игра. Собирай команду 4–6 человек, проверь эрудицию и поборись за приз."},{"date":"30 июля · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Активная городская игра — формат каждый раз новый. Динамично, весело и всегда неожиданно."},{"date":"1 августа · Сб","name":"Киновечер","time":"21:00","place":"под открытым небом","desc":"Совместный просмотр кино под открытым небом. Большой экран, плед и хорошая компания."},{"date":"6 августа · Чт","name":"Квиз","time":"18:00","place":"место в анонсе","desc":"Ещё один вечер умных вопросов и азартных команд. Реванш для тех, кто хочет взять верх."},{"date":"8 августа · Сб","name":"Опен аир","time":"17:00","place":"на свежем воздухе","desc":"Вечеринка на свежем воздухе. Музыка, лето и свои люди — то, ради чего стоит выйти из дома."},{"date":"13 августа · Чт","name":"Игра","time":"19:00","place":"место в анонсе","desc":"Новый раунд городской игры. Командный дух, движение и хорошее настроение."},{"date":"15 августа · Сб","name":"Шашлыки","time":"15:00","place":"выезд на природу","desc":"Дружеский выезд на природу. Мясо на углях, музыка и общение в кругу своих."},{"date":"20 августа · Чт","name":"Стендап","time":"20:00","place":"место в анонсе","desc":"Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой."},{"date":"20 августа · Чт","name":"Афтерпати","time":"23:00","place":"место в анонсе","desc":"Закрытие сезона сразу после стендапа. Танцуем до утра и прощаемся с летом как следует."}];
 var modal=document.getElementById('modal');var mClose=document.getElementById('mclose');
 function openEv(i){var e=EVENTS[i];if(!e)return;document.getElementById('mdate').textContent=e.date;document.getElementById('mtitle').textContent=e.name;document.getElementById('mmeta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';document.getElementById('mdesc').textContent=e.desc;modal.classList.add('open');}
 function closeEv(){modal.classList.remove('open');}
