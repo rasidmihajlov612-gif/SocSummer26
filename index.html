@@ -1,260 +1,477 @@
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SOC° — локальные события · Summer 26</title>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOC_OS // SUMMER_26</title>
+<meta name="description" content="SOC_OS — локальные события как ретро-операционная система. Квизы, игры и вечеринки. Сезон Summer 26 стартует 20 июля.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap');
-  :root{ --bg:#04100a; --bg2:#061712; --green:#1E7A45; --green-br:#36D67E; --teal:#1fa38c; --green-deep:#0A2417; --green-line:#173a25; --white:#fff; --grey:#9fb3a7; }
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root{
+    --bg:#03100a; --bg-2:#061a10; --green:#1E7A45; --green-br:#36D67E; --green-dim:#1f6e44;
+    --line:#1c4d31; --panel:rgba(6,26,16,.86); --glow:rgba(54,214,126,.55);
+    --m:'JetBrains Mono',monospace; --d:'Unbounded',sans-serif;
+  }
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html{ scroll-behavior:smooth; }
-  body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--white); overflow-x:hidden; cursor:default; }
+  html,body{ height:100%; }
+  body{ font-family:var(--m); background:#020805; color:var(--green-br); overflow:hidden; height:100vh;
+    text-shadow:0 0 5px rgba(54,214,126,.45); }
   a{ color:inherit; text-decoration:none; }
-  ::selection{ background:var(--green-br); color:#04100a; }
-  .bgwrap{ position:fixed; inset:0; z-index:-2; overflow:hidden; background:var(--bg); }
-  .blob{ position:absolute; border-radius:50%; filter:blur(90px); opacity:.42; mix-blend-mode:screen; will-change:transform; }
-  .b1{ width:60vw; height:60vw; background:#1E7A45; left:-10vw; top:-15vw; animation:f1 22s ease-in-out infinite alternate; }
-  .b2{ width:55vw; height:55vw; background:#36D67E; right:-12vw; top:10vh; animation:f2 26s ease-in-out infinite alternate; }
-  .b3{ width:50vw; height:50vw; background:#1fa38c; left:20vw; bottom:-20vw; animation:f3 30s ease-in-out infinite alternate; }
-  .b4{ width:40vw; height:40vw; background:#0e9e57; right:10vw; bottom:0; animation:f1 24s ease-in-out infinite alternate-reverse; }
-  @keyframes f1{ 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(8vw,6vh) scale(1.15);} }
-  @keyframes f2{ 0%{transform:translate(0,0) scale(1.1);} 100%{transform:translate(-7vw,8vh) scale(.9);} }
-  @keyframes f3{ 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(6vw,-6vh) scale(1.2);} }
-  .bgtint{ position:fixed; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(2,9,5,.82), rgba(2,7,4,.93)); }
-  .grain{ position:fixed; inset:0; z-index:-1; opacity:.05; pointer-events:none; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-  .cursor-glow{ position:fixed; width:440px; height:440px; border-radius:50%; pointer-events:none; z-index:1; background:radial-gradient(circle, rgba(54,214,126,.16), transparent 60%); transform:translate(-50%,-50%); mix-blend-mode:screen; will-change:transform; }
-  @media(hover:none){ .cursor-glow{ display:none; } }
-  .topbar{ position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(3,11,7,.85); backdrop-filter:blur(8px); overflow:hidden; height:64px; display:flex; align-items:center; border-bottom:3px solid var(--green-br); }
-  .marq{ display:inline-flex; white-space:nowrap; animation:marq 16s linear infinite; }
-  .marq span{ font-family:'Unbounded',sans-serif; font-weight:900; font-size:30px; line-height:1; letter-spacing:3px; text-transform:uppercase; color:transparent; -webkit-text-stroke:1.4px var(--green-br); padding:0 24px; display:inline-flex; align-items:center; }
-  .marq span .st{ color:var(--green-br); -webkit-text-stroke:0; }
-  @keyframes marq{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
-  @media(max-width:600px){ .topbar{ height:52px; } .marq span{ font-size:22px; letter-spacing:2px; padding:0 16px; -webkit-text-stroke:1.1px var(--green-br);} }
-  .wrap{ max-width:1180px; margin:0 auto; padding:0 40px; position:relative; z-index:2; }
-  @media(max-width:860px){ .wrap{ padding:0 20px; } }
-  section{ padding:120px 0; position:relative; scroll-margin-top:80px; }
-  .qnav{ display:flex; flex-wrap:wrap; gap:12px; margin-top:42px; }
-  .qchip{ font-family:'JetBrains Mono'; font-size:16px; letter-spacing:1px; text-transform:uppercase; padding:14px 26px; border-radius:50px; border:1.5px solid rgba(54,214,126,.5); color:#dcece2; background:rgba(10,38,24,.4); display:inline-flex; align-items:center; gap:9px; transition:transform .22s, border-color .22s, color .22s, box-shadow .22s, background .22s; }
-  .qchip::before{ content:'↗'; color:var(--green-br); font-size:14px; }
-  .qchip:hover{ border-color:var(--green-br); color:#fff; transform:translateY(-3px); box-shadow:0 10px 30px rgba(54,214,126,.22); }
-  .qchip.acc{ background:var(--green-br); color:#04100a; border-color:var(--green-br); font-weight:700; font-size:17px; }
-  .qchip.acc::before{ content:'★'; color:#04100a; }
-  .qchip.acc:hover{ background:#46e88c; box-shadow:0 12px 36px rgba(54,214,126,.4); }
-  @media(max-width:560px){ .qnav{ gap:9px; margin-top:34px; } .qchip{ font-size:14px; padding:12px 20px; } .qchip.acc{ font-size:14px; } }
-  .kk{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:5px; color:var(--green-br); text-transform:uppercase; display:flex; align-items:center; gap:14px; margin-bottom:26px; }
-  .kk::before{ content:''; width:38px; height:1px; background:var(--green-br); }
-  h2.sec{ font-family:'Unbounded'; font-weight:800; font-size:clamp(38px,5vw,70px); line-height:1; letter-spacing:-2px; margin-bottom:18px; }
-  h2.sec em{ font-style:normal; color:var(--green-br); }
-  .reveal{ opacity:0; transform:translateY(34px); transition:opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1); }
-  .reveal.in{ opacity:1; transform:none; }
-  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:120px; }
-  .hero .badge{ display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono'; font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--green-br); border:1px solid var(--green); border-radius:50px; padding:9px 20px; width:max-content; }
-  .hero .badge .dot{ width:8px; height:8px; border-radius:50%; background:var(--green-br); box-shadow:0 0 10px var(--green-br); animation:pulse 1.8s infinite; }
-  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
-  .hero h1{ font-family:'Unbounded'; font-weight:900; font-size:clamp(72px,14vw,210px); line-height:.86; letter-spacing:-5px; margin:30px 0 8px; }
-  .hero h1 .sup{ font-size:.34em; color:var(--green-br); vertical-align:super; }
-  .hero .lead{ font-size:clamp(20px,2.4vw,30px); color:#cfe0d6; font-weight:300; max-width:760px; line-height:1.45; margin-top:14px; }
-  .hero .lead b{ color:var(--green-br); font-weight:600; }
-  .btn{ font-family:'JetBrains Mono'; font-size:14px; letter-spacing:1px; text-transform:uppercase; padding:18px 34px; border-radius:50px; font-weight:700; transition:transform .2s, box-shadow .2s; display:inline-block; }
-  .btn.primary{ background:var(--green-br); color:#04100a; }
-  .btn.primary:hover{ transform:translateY(-3px); box-shadow:0 14px 36px rgba(54,214,126,.3); }
-  .btn.ghost{ border:1px solid var(--green); color:#fff; }
-  .btn.ghost:hover{ border-color:var(--green-br); color:var(--green-br); transform:translateY(-3px); }
-  .scrollhint{ position:absolute; bottom:34px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono'; font-size:11px; letter-spacing:3px; color:var(--grey); text-transform:uppercase; }
-  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:50px; border-top:1px solid var(--green-line); border-bottom:1px solid var(--green-line); }
-  .stat{ padding:30px 22px; border-right:1px solid var(--green-line); }
-  .stat:last-child{ border-right:none; }
-  .stat .n{ font-family:'Unbounded'; font-weight:900; font-size:44px; color:var(--green-br); line-height:1; }
-  .stat .l{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:2px; color:var(--grey); text-transform:uppercase; margin-top:10px; }
-  @media(max-width:680px){ .stats{ grid-template-columns:1fr 1fr; } .stat:nth-child(2){border-right:none;} }
-  .about-lead{ font-size:clamp(20px,2.5vw,30px); font-weight:300; color:#dcece2; line-height:1.5; max-width:900px; }
-  .about-lead b{ color:#fff; font-weight:600; }
-  .sched{ margin-top:20px; }
-  .sched-note{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; color:var(--green-br); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
-  .sched-note::before{ content:'●'; font-size:8px; }
-  .ev{ display:grid; grid-template-columns:130px 1fr auto 34px; align-items:center; gap:20px; padding:22px 0; border-top:1px solid var(--green-line); }
-  .ev:last-child{ border-bottom:1px solid var(--green-line); }
-  .ev .d{ font-family:'Unbounded'; font-weight:800; font-size:26px; letter-spacing:-1px; }
-  .ev .d small{ display:block; font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:var(--grey); margin-top:3px; }
-  .ev .name{ font-family:'Unbounded'; font-weight:700; font-size:clamp(22px,3vw,34px); text-transform:uppercase; letter-spacing:-1px; }
-  .ev .name span{ display:block; font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; text-transform:none; color:var(--green-br); font-weight:500; margin-top:4px; }
-  .ev .tag{ font-family:'JetBrains Mono'; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#04100a; background:var(--green-br); border-radius:30px; padding:7px 14px; white-space:nowrap; }
-  .ev .go{ font-size:24px; color:var(--green-br); justify-self:end; }
-  .ev.hl .d, .ev.hl .name{ color:var(--green-br); }
-  .ev{ cursor:pointer; transition:padding-left .3s, background .3s; }
-  .ev:hover{ padding-left:14px; background:linear-gradient(90deg, rgba(54,214,126,.08), transparent); }
-  .ev .go{ transition:transform .25s; }
-  .ev:hover .go{ transform:translateX(5px); }
-  @media(max-width:680px){ .ev{ grid-template-columns:84px 1fr 26px; } .ev .tag{ display:none; } .ev .d{ font-size:22px; } .ev .go{ font-size:20px; } }
+  ::selection{ background:var(--green-br); color:#04100a; text-shadow:none; }
+  button{ font-family:var(--m); cursor:pointer; }
 
-  /* модалка события (нужна в итоговом сайте) */
-  .modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(2,7,4,.7); backdrop-filter:blur(8px); }
-  .modal.open{ display:flex; animation:fade .25s ease; }
-  @keyframes fade{ from{opacity:0;} to{opacity:1;} }
-  .mcard{ width:min(560px,100%); background:linear-gradient(160deg, #0c2a1c, #050d09); border:1px solid var(--green); border-radius:24px; padding:42px; position:relative; box-shadow:0 30px 80px rgba(0,0,0,.6); animation:pop .3s cubic-bezier(.2,.9,.3,1.2); }
-  @keyframes pop{ from{opacity:0; transform:translateY(20px) scale(.97);} to{opacity:1; transform:none;} }
-  .mclose{ position:absolute; top:20px; right:22px; width:40px; height:40px; border-radius:50%; border:1px solid var(--green-line); background:rgba(0,0,0,.3); color:#cfe0d6; font-size:20px; cursor:pointer; transition:all .2s; }
-  .mclose:hover{ border-color:var(--green-br); color:#fff; }
-  .mdate{ font-family:'JetBrains Mono'; font-size:14px; letter-spacing:3px; color:var(--green-br); text-transform:uppercase; }
-  .mtitle{ font-family:'Unbounded'; font-weight:800; font-size:46px; letter-spacing:-2px; text-transform:uppercase; margin:12px 0 18px; line-height:1; }
-  .mmeta{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
-  .mmeta span{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; border:1px solid var(--green-line); border-radius:50px; padding:8px 16px; color:#cfe0d6; }
-  .mdesc{ font-size:18px; line-height:1.55; color:#dcece2; font-weight:300; margin-bottom:30px; }
-  .mbtns{ display:flex; gap:12px; flex-wrap:wrap; }
-  @media(max-width:520px){ .mcard{ padding:30px 24px; } .mtitle{ font-size:34px; } }
+  /* ===== CRT overlay ===== */
+  .crt{ position:fixed; inset:0; z-index:9000; pointer-events:none; }
+  .crt::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.22) 3px, rgba(0,0,0,0) 4px); mix-blend-mode:multiply; }
+  .crt::after{ content:''; position:absolute; inset:0; background:radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%); }
+  .flick{ position:fixed; inset:0; z-index:9001; pointer-events:none; background:rgba(54,214,126,.03); animation:flick .14s steps(2) infinite; }
+  @keyframes flick{ 0%{opacity:.5;} 50%{opacity:.9;} 100%{opacity:.4;} }
 
-  .flow{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:20px; }
-  .step{ position:relative; padding-right:26px; }
-  .step:not(:last-child)::after{ content:'→'; position:absolute; right:0; top:18px; transform:translateX(50%); color:var(--green-br); font-size:28px; }
-  .step .no{ width:64px; height:64px; border-radius:50%; border:2px solid var(--green-br); display:flex; align-items:center; justify-content:center; font-family:'Unbounded'; font-weight:900; font-size:26px; color:var(--green-br); }
-  .step h3{ font-family:'Unbounded'; font-weight:700; font-size:24px; margin:20px 0 8px; }
-  .step p{ color:var(--grey); font-weight:300; font-size:17px; line-height:1.5; }
-  .how-cta{ margin-top:54px; display:flex; align-items:center; justify-content:space-between; gap:22px; flex-wrap:wrap; border:1px dashed var(--green); border-radius:18px; padding:28px 32px; background:rgba(10,38,24,.3); }
-  .how-cta .t{ font-family:'Unbounded'; font-weight:700; font-size:clamp(20px,2.4vw,28px); line-height:1.2; }
-  .how-cta .t span{ color:var(--green-br); }
-  @media(max-width:760px){ .flow{ grid-template-columns:1fr; gap:6px; } .step{ display:grid; grid-template-columns:64px 1fr; gap:20px; align-items:start; padding:0 0 26px; } .step:not(:last-child)::after{ content:''; left:31px; top:64px; right:auto; transform:none; width:2px; height:calc(100% - 64px); background:var(--green-line); } .step h3{ margin-top:6px; } .step h3, .step p{ grid-column:2; } }
-  .order{ background:linear-gradient(140deg, var(--green-deep), rgba(5,13,9,.6)); border:1px solid var(--green); border-radius:28px; padding:clamp(36px,5vw,64px); position:relative; overflow:hidden; }
-  .order::after{ content:''; position:absolute; right:-80px; bottom:-80px; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(54,214,126,.18), transparent 70%); }
-  .order h2{ font-family:'Unbounded'; font-weight:800; font-size:clamp(32px,4.4vw,58px); line-height:1.02; letter-spacing:-2px; }
-  .order h2 em{ font-style:normal; color:var(--green-br); }
-  .order p{ font-size:clamp(18px,2.2vw,24px); color:#cfe0d6; font-weight:300; max-width:680px; margin-top:20px; line-height:1.5; }
-  .order .tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; }
-  .order .tags span{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:1px; border:1px solid var(--green); border-radius:50px; padding:9px 18px; color:#dcece2; }
-  .order .btns{ display:flex; gap:14px; flex-wrap:wrap; margin-top:34px; position:relative; z-index:2; }
-  .cont-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:50px; margin-top:20px; align-items:center; }
-  .cont-card{ border:1px solid var(--green-line); border-radius:20px; padding:30px 32px; background:rgba(10,36,23,.35); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-  .cont-card .lbl{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:var(--grey); text-transform:uppercase; }
-  .cont-card .val{ font-family:'Unbounded'; font-weight:700; font-size:clamp(20px,2.4vw,28px); margin-top:6px; }
-  .cont-card .arrow{ font-size:30px; color:var(--green-br); }
-  .cont-side .big{ font-family:'Unbounded'; font-weight:900; font-size:clamp(40px,6vw,86px); line-height:.9; letter-spacing:-3px; }
-  .cont-side .big .g{ color:var(--green-br); }
-  .cont-side p{ color:var(--grey); font-weight:300; font-size:18px; margin-top:18px; line-height:1.5; }
-  @media(max-width:860px){ .cont-grid{ grid-template-columns:1fr; gap:24px; } }
-  footer{ border-top:1px solid var(--green-line); padding:40px 0; margin-top:40px; }
-  .foot-in{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-family:'JetBrains Mono'; font-size:12px; letter-spacing:2px; color:#3a5446; text-transform:uppercase; }
-  .foot-in .l{ color:var(--green-br); }
-  @media(max-width:600px){ section{ padding:78px 0; } .hero{ min-height:auto; padding-top:108px; padding-bottom:56px; } .hero h1{ letter-spacing:-3px; } .hero .lead br{ display:none; } .scrollhint{ display:none; } .kk{ letter-spacing:3px; } .stat{ padding:24px 16px; } .stat .n{ font-size:36px; } .ev{ gap:12px; padding:18px 0; } .ev .name span{ font-size:11px; } .order{ border-radius:22px; } .cont-card{ padding:22px 22px; } .foot-in{ justify-content:center; text-align:center; gap:10px; } }
-  @media(max-width:380px){ .wrap{ padding:0 16px; } .btn{ padding:15px 24px; font-size:13px; } }
+  /* ===== BOOT ===== */
+  #boot{ position:fixed; inset:0; z-index:8000; background:#020805; padding:6vh 6vw; font-size:14px; line-height:1.7; overflow:hidden; }
+  #boot .blog{ white-space:pre-wrap; }
+  #boot .ok{ color:var(--green-br); } #boot .dim{ color:var(--green-dim); }
+  #boot .bar{ margin-top:18px; width:min(420px,80vw); border:1px solid var(--green); height:18px; padding:2px; }
+  #boot .bar i{ display:block; height:100%; width:0; background:var(--green-br); box-shadow:0 0 10px var(--glow); }
+  #boot .skip{ position:absolute; bottom:5vh; left:6vw; color:var(--green-dim); font-size:12px; }
+  #boot.hide{ opacity:0; transition:opacity .5s; pointer-events:none; }
 
-  /* конец CSS сайта */
+  /* ===== DESKTOP ===== */
+  #desk{ position:fixed; inset:0; opacity:0; }
+  #desk.on{ opacity:1; transition:opacity .6s; }
+  .wall{ position:absolute; inset:0; background:
+      radial-gradient(60% 50% at 50% 36%, rgba(31,122,69,.30), transparent 70%),
+      #03100a; overflow:hidden; }
+  .wall::before{ content:''; position:absolute; inset:-2px; background-image:linear-gradient(rgba(54,214,126,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(54,214,126,.07) 1px,transparent 1px); background-size:38px 38px; }
+  .wall .ghost{ position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); font-family:var(--d); font-weight:900; font-size:26vw; line-height:.8; color:rgba(54,214,126,.05); letter-spacing:-1vw; white-space:nowrap; }
+  .wall .ghost b{ color:rgba(54,214,126,.08); }
+
+  /* desktop icons */
+  #icons{ position:absolute; top:24px; left:24px; display:flex; flex-direction:column; gap:6px; width:118px; z-index:5; }
+  .ic{ background:transparent; border:1px solid transparent; color:var(--green-br); padding:12px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px; border-radius:8px; transition:background .15s, border-color .15s; }
+  .ic:hover,.ic:focus-visible{ background:rgba(54,214,126,.12); border-color:var(--green); outline:none; }
+  .ic .gl{ font-size:30px; line-height:1; }
+  .ic .lb{ font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+  @media(max-width:640px){ #icons{ flex-direction:row; flex-wrap:wrap; width:auto; right:12px; left:12px; top:12px; gap:4px; justify-content:center; } .ic{ width:80px; padding:9px 4px; } .ic .gl{ font-size:24px; } }
+
+  /* windows */
+  .win{ position:absolute; width:540px; max-width:calc(100vw - 24px); background:var(--panel); border:1px solid var(--green); border-radius:10px; box-shadow:0 0 0 1px rgba(54,214,126,.15), 0 24px 60px rgba(0,0,0,.6), 0 0 40px rgba(54,214,126,.12); display:none; flex-direction:column; overflow:hidden; backdrop-filter:blur(2px); }
+  .win.open{ display:flex; }
+  .win-bar{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 12px; background:linear-gradient(180deg,rgba(31,122,69,.5),rgba(31,122,69,.22)); border-bottom:1px solid var(--green); cursor:grab; user-select:none; }
+  .win-bar.drag{ cursor:grabbing; }
+  .win-bar .ttl{ font-size:12px; letter-spacing:2px; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+  .win-bar .ttl::before{ content:'▮'; color:var(--green-br); }
+  .win-bar .x{ width:22px; height:22px; border:1px solid var(--green); background:transparent; color:var(--green-br); font-size:12px; line-height:1; border-radius:4px; }
+  .win-bar .x:hover{ background:var(--green-br); color:#04100a; }
+  .win-body{ padding:20px; overflow:auto; max-height:70vh; }
+  .win-body::-webkit-scrollbar{ width:8px; } .win-body::-webkit-scrollbar-thumb{ background:var(--green-dim); border-radius:8px; }
+  @media(max-width:640px){ .win{ width:calc(100vw - 16px) !important; left:8px !important; } .win-body{ max-height:60vh; } }
+
+  h2.wt{ font-family:var(--d); font-weight:800; font-size:30px; letter-spacing:-1px; text-transform:uppercase; line-height:1; margin-bottom:8px; color:#d8ffe9; }
+  .sub{ font-size:12px; color:var(--green-dim); letter-spacing:1px; text-transform:uppercase; margin-bottom:16px; }
+  p.tx{ font-size:14px; line-height:1.7; color:#bfe9cf; }
+  p.tx b{ color:var(--green-br); }
+  .row-stat{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+  .st{ border:1px solid var(--line); border-radius:8px; padding:14px; }
+  .st b{ font-family:var(--d); font-size:26px; color:var(--green-br); display:block; }
+  .st span{ font-size:11px; color:var(--green-dim); letter-spacing:1px; text-transform:uppercase; }
+
+  .evlist{ display:flex; flex-direction:column; }
+  .evi{ display:grid; grid-template-columns:78px 1fr auto; align-items:center; gap:12px; padding:13px 8px; border-top:1px solid var(--line); cursor:pointer; transition:background .12s, padding-left .12s; }
+  .evi:last-child{ border-bottom:1px solid var(--line); }
+  .evi:hover{ background:rgba(54,214,126,.1); padding-left:14px; }
+  .evi .d{ font-family:var(--d); font-weight:800; font-size:16px; }
+  .evi .nm{ font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:.5px; }
+  .evi .nm small{ display:block; font-weight:400; font-size:11px; color:var(--green-dim); text-transform:none; letter-spacing:0; margin-top:2px; }
+  .evi .go{ color:var(--green-br); }
+  .evi.hl .d,.evi.hl .nm{ color:var(--green-br); }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:12px 18px; border-radius:6px; border:1px solid var(--green); color:var(--green-br); background:transparent; transition:background .15s, color .15s, transform .12s; }
+  .btn:hover{ background:var(--green-br); color:#04100a; transform:translateY(-2px); }
+  .btn.fill{ background:var(--green-br); color:#04100a; }
+  .btn.fill:hover{ background:#5cf2a3; }
+  .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+  .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  .tags span{ font-size:11px; border:1px solid var(--line); border-radius:30px; padding:6px 12px; color:#bfe9cf; }
+  .clist a{ display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-top:10px; transition:background .12s, border-color .12s; }
+  .clist a:hover{ background:rgba(54,214,126,.1); border-color:var(--green); }
+  .clist .lb{ font-size:11px; color:var(--green-dim); letter-spacing:1px; text-transform:uppercase; }
+  .clist .vl{ font-family:var(--d); font-weight:700; font-size:18px; color:#d8ffe9; }
+  .steps{ counter-reset:s; }
+  .step{ display:grid; grid-template-columns:34px 1fr; gap:14px; padding:12px 0; border-top:1px solid var(--line); }
+  .step:first-child{ border-top:none; }
+  .step .n{ width:30px; height:30px; border:1px solid var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--d); font-weight:800; color:var(--green-br); }
+  .step h4{ font-size:14px; text-transform:uppercase; letter-spacing:.5px; color:#d8ffe9; margin-bottom:3px; }
+  .step p{ font-size:13px; color:#9fcdb1; line-height:1.5; }
+
+  /* terminal */
+  #win-terminal .win-body{ padding:0; }
+  .term{ height:340px; max-height:60vh; display:flex; flex-direction:column; }
+  .term-out{ flex:1; overflow:auto; padding:16px; font-size:13px; line-height:1.6; white-space:pre-wrap; }
+  .term-out .pr{ color:var(--green-dim); }
+  .term-out .er{ color:#ff6b6b; text-shadow:0 0 5px rgba(255,107,107,.4); }
+  .term-out a{ color:var(--green-br); text-decoration:underline; }
+  .term-in{ display:flex; align-items:center; gap:8px; border-top:1px solid var(--line); padding:10px 16px; }
+  .term-in span{ color:var(--green-br); }
+  .term-in input{ flex:1; background:transparent; border:none; outline:none; color:var(--green-br); font-family:var(--m); font-size:13px; text-shadow:0 0 5px rgba(54,214,126,.45); }
+
+  /* taskbar */
+  #bar{ position:absolute; left:0; right:0; bottom:0; height:42px; z-index:200; display:flex; align-items:center; gap:8px; padding:0 10px; background:rgba(3,16,10,.92); border-top:1px solid var(--green); backdrop-filter:blur(6px); }
+  #start{ font-weight:700; font-size:13px; letter-spacing:1px; padding:7px 14px; border:1px solid var(--green); border-radius:6px; background:rgba(54,214,126,.12); color:var(--green-br); display:flex; align-items:center; gap:7px; }
+  #start:hover{ background:var(--green-br); color:#04100a; }
+  #tasks{ display:flex; gap:6px; flex:1; overflow:hidden; }
+  .tk{ font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:6px 12px; border:1px solid var(--line); border-radius:6px; color:#bfe9cf; background:transparent; white-space:nowrap; }
+  .tk.act{ border-color:var(--green); background:rgba(54,214,126,.12); color:var(--green-br); }
+  #clock{ font-size:12px; letter-spacing:1px; color:var(--green-br); text-align:right; white-space:nowrap; padding-left:8px; }
+  #clock b{ color:#d8ffe9; }
+  #clock small{ display:block; font-size:10px; color:var(--green-dim); }
+  @media(max-width:640px){ #tasks{ display:none; } #start{ font-size:12px; } }
+
+  /* start menu */
+  #menu{ position:absolute; left:10px; bottom:50px; z-index:300; width:240px; background:var(--panel); border:1px solid var(--green); border-radius:10px; padding:8px; display:none; box-shadow:0 20px 50px rgba(0,0,0,.6); }
+  #menu.on{ display:block; }
+  #menu .mi{ display:flex; align-items:center; gap:10px; width:100%; text-align:left; padding:10px 12px; border:none; background:transparent; color:#bfe9cf; font-size:12px; letter-spacing:1px; text-transform:uppercase; border-radius:6px; }
+  #menu .mi:hover{ background:rgba(54,214,126,.14); color:var(--green-br); }
+  #menu .sep{ height:1px; background:var(--line); margin:6px 4px; }
+
+  @media(prefers-reduced-motion:reduce){ .flick{ display:none; } #boot .bar i{ transition:none; } *{ animation:none !important; } }
 </style>
-</head><body>
+</head>
+<body>
 
+<!-- BOOT -->
+<div id="boot">
+  <div class="blog" id="blog"></div>
+  <div class="bar"><i id="bbar"></i></div>
+  <div class="skip">[ нажми любую клавишу или кликни — пропустить ]</div>
+</div>
 
-<div class="bgwrap"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
-<div class="bgtint"></div><div class="grain"></div><div class="cursor-glow" id="glow" style="transform: translate(1230px, 737.997px) translate(-50%, -50%);"></div>
+<!-- DESKTOP -->
+<div id="desk">
+  <div class="wall"><div class="ghost">SOC<b>26</b></div></div>
 
-<a href="#schedule" class="topbar"><div class="marq">
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-  <span>Если отдыхать, то с SOC. Записывайся !<span class="st">&nbsp;&nbsp;✦&nbsp;&nbsp;</span></span>
-</div></a>
-
-<section class="hero" id="top"><div class="wrap">
-  <div class="badge reveal"> Локальные события · с 2024</div>
-  <h1 class="reveal">SOC<span class="sup">26</span></h1>
-  <p class="lead reveal">Квизы, игры и вечеринки в нашем городе.<br><b>Summer 26</b> — самый громкий сезон. Стартуем 20 июля.</p>
-  <div class="qnav reveal">
-    <a href="#schedule" class="qchip acc">Расписание</a>
-    <a href="#order" class="qchip acc">Заказать ивент</a>
-    <a href="#about" class="qchip">О нас</a>
-    <a href="#how" class="qchip">Как попасть</a>
-    <a href="#contacts" class="qchip">Контакты</a>
+  <div id="icons">
+    <button class="ic" data-open="schedule"><span class="gl">▤</span><span class="lb">Расписание</span></button>
+    <button class="ic" data-open="about"><span class="gl">◉</span><span class="lb">О нас</span></button>
+    <button class="ic" data-open="how"><span class="gl">↳</span><span class="lb">Как попасть</span></button>
+    <button class="ic" data-open="order"><span class="gl">✦</span><span class="lb">Заказать</span></button>
+    <button class="ic" data-open="contacts"><span class="gl">☏</span><span class="lb">Контакты</span></button>
+    <button class="ic" data-open="terminal"><span class="gl">▮</span><span class="lb">Терминал</span></button>
+    <a class="ic" href="https://forms.gle/AsQCmv5x1JCextg29" target="_blank" rel="noopener"><span class="gl">⤓</span><span class="lb">Записаться</span></a>
   </div>
-</div><div class="scrollhint">↓ листай вниз</div></section>
 
-<section id="about"><div class="wrap">
-  <div class="kk reveal">Кто мы</div>
-  <h2 class="sec reveal">Команда, которая <em>собирает людей.</em></h2>
-  <p class="about-lead reveal">Мы — молодая команда из нашего города. Организуем <b>квизы, игры, вечеринки и события</b>, которых здесь не хватает. Делаем всё сами — от идеи до площадки.</p>
-  <div class="stats reveal">
-    <div class="stat"><div class="n">2024</div><div class="l">Работаем с</div></div>
-    <div class="stat"><div class="n">15+</div><div class="l">Событий за сезон</div></div>
-    <div class="stat"><div class="n">4+</div><div class="l">Формата событий</div></div>
-    <div class="stat"><div class="n">∞</div><div class="l">Хорошего настроения</div></div>
+  <!-- WINDOWS -->
+  <div class="win" id="win-welcome" style="top:90px; left:200px; width:480px;">
+    <div class="win-bar"><div class="ttl">README.txt</div><button class="x" data-close="welcome">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">SOC<span style="color:var(--green-br)">26</span> // SUMMER</h2>
+      <div class="sub">локальная операционная система лета</div>
+      <p class="tx">Привет 👋 Это <b>SOC_OS</b> — наш сайт в виде системы. Кликай по иконкам слева или открывай <b>Терминал</b> и пиши команды.<br><br>Квизы, игры и вечеринки в нашем городе. <b>Сезон стартует 20 июля.</b></p>
+      <div class="btns">
+        <button class="btn fill" data-open="schedule">▤ Открыть расписание</button>
+        <button class="btn" data-open="terminal">▮ Терминал</button>
+      </div>
+    </div>
   </div>
-</div></section>
 
-<section id="schedule"><div class="wrap">
-  <div class="kk reveal">Главное событие сезона</div>
-  <h2 class="sec reveal">Расписание <em>Summer 26</em></h2>
-  <div class="sched-note reveal">жми на событие — детали и запись</div>
-  <div class="sched reveal"><div class="ev hl" data-i="0"><div class="d">19.07<small>Вск</small></div><div class="name">Просмотр финала Чм-26</div><div class="tag">Финал</div><span class="go">→</span></div></div>
-  
-  
-</div></section>
-
-<section id="how"><div class="wrap">
-  <div class="kk reveal">Как попасть</div>
-  <h2 class="sec reveal">4 шага <em>до нас</em></h2>
-  <div class="flow reveal">
-    <div class="step"><div class="no">1</div><h3>Подпишись</h3><p>Жми на наш Телеграм-канал — там все анонсы событий.</p></div>
-    <div class="step"><div class="no">2</div><h3>Выбери</h3><p>Открой расписание и найди событие по душе.</p></div>
-    <div class="step"><div class="no">3</div><h3>Запишись</h3><p>Нажми на событие — там детали и кнопка записи.</p></div>
-    <div class="step"><div class="no">4</div><h3>Приходи</h3><p>Бери своих и отдыхай вместе с нами.</p></div>
+  <div class="win" id="win-schedule" style="top:70px; left:430px;">
+    <div class="win-bar"><div class="ttl">schedule.app — SUMMER_26</div><button class="x" data-close="schedule">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">Расписание</h2>
+      <div class="sub">20.07 — 20.08 · жми на событие</div>
+      <div class="evlist" id="evlist"></div>
+    </div>
   </div>
-  <div class="how-cta reveal">
-    <div class="t">Хочешь событие <span>только для своих?</span></div>
-    <a href="#order" class="btn primary">Заказать мероприятие</a>
+
+  <div class="win" id="win-event" style="top:140px; left:480px; width:460px;">
+    <div class="win-bar"><div class="ttl" id="ev-ttl">event.exe</div><button class="x" data-close="event">✕</button></div>
+    <div class="win-body">
+      <div class="sub" id="ev-date"></div>
+      <h2 class="wt" id="ev-name"></h2>
+      <div class="tags" id="ev-meta"></div>
+      <p class="tx" id="ev-desc" style="margin-top:14px;"></p>
+      <div class="btns">
+        <a class="btn fill" href="https://forms.gle/AsQCmv5x1JCextg29" target="_blank" rel="noopener">⤓ Записаться</a>
+        <a class="btn" href="https://t.me/SocEvents" target="_blank" rel="noopener">↳ В Телеграм</a>
+      </div>
+    </div>
   </div>
-</div></section>
 
-<section id="order"><div class="wrap"><div class="order reveal">
-  <div class="kk" style="margin-bottom:18px;">Частное мероприятие</div>
-  <h2>Своё событие <em>под ключ.</em></h2>
-  <p>Проведём квиз, праздник, корпоратив или день рождения в нашем фирменном стиле. Берём организацию на себя — вам остаётся прийти и веселиться.</p>
-  <div class="tags"><span>Квиз на заказ</span><span>День рождения</span><span>Корпоратив</span><span>Тематическая вечеринка</span></div>
-  <div class="btns">
-    <a href="https://t.me/SocEvents" target="_blank" class="btn primary">Написать в Телеграм</a>
-    <a href="tel:+79247698050" class="btn ghost">Позвонить</a>
+  <div class="win" id="win-about" style="top:120px; left:260px;">
+    <div class="win-bar"><div class="ttl">about.md</div><button class="x" data-close="about">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">Кто мы</h2>
+      <div class="sub">// команда, которая собирает людей</div>
+      <p class="tx">Молодая команда из нашего города. Организуем <b>квизы, игры, вечеринки и события</b>, которых здесь не хватает. Делаем всё сами — от идеи до площадки.</p>
+      <div class="row-stat">
+        <div class="st"><b>2024</b><span>работаем с</span></div>
+        <div class="st"><b>10</b><span>событий / сезон</span></div>
+        <div class="st"><b>3+</b><span>формата</span></div>
+        <div class="st"><b>∞</b><span>настроения</span></div>
+      </div>
+    </div>
   </div>
-</div></div></section>
 
-<section id="contacts"><div class="wrap"><div class="cont-grid">
-  <div class="reveal">
-    <div class="kk">Контакты</div>
-    <a href="https://t.me/SocEvents" target="_blank" class="cont-card"><div><div class="lbl">Телеграм-канал</div><div class="val">t.me/SocEvents</div></div><div class="arrow">↗</div></a>
-    <a href="tel:+79247698050" class="cont-card"><div><div class="lbl">Рашид</div><div class="val">+7 924 769-80-50</div></div><div class="arrow">↗</div></a>
-    <a href="tel:+79245459393" class="cont-card"><div><div class="lbl">Алексей</div><div class="val">+7 924 545-93-93</div></div><div class="arrow">↗</div></a>
+  <div class="win" id="win-how" style="top:150px; left:330px;">
+    <div class="win-bar"><div class="ttl">how_to_join.sh</div><button class="x" data-close="how">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">Как попасть</h2>
+      <div class="sub">4 шага до тусовки</div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div><h4>Подпишись</h4><p>Жми на наш Телеграм-канал — там все анонсы.</p></div></div>
+        <div class="step"><div class="n">2</div><div><h4>Выбери</h4><p>Открой расписание и найди событие по душе.</p></div></div>
+        <div class="step"><div class="n">3</div><div><h4>Запишись</h4><p>Нажми на событие — там детали и кнопка записи.</p></div></div>
+        <div class="step"><div class="n">4</div><div><h4>Приходи</h4><p>Бери своих и отдыхай вместе с нами.</p></div></div>
+      </div>
+      <div class="btns"><button class="btn fill" data-open="order">✦ Заказать своё событие</button></div>
+    </div>
   </div>
-  <div class="cont-side reveal">
-    <div class="big">Город + <span class="g">SOC.</span></div>
-    <p>Подписывайся на канал, чтобы не пропустить анонсы сезона. По вопросам и заказу мероприятий — звони или пиши, ответим быстро.</p>
+
+  <div class="win" id="win-order" style="top:110px; left:360px;">
+    <div class="win-bar"><div class="ttl">order.exe — частное мероприятие</div><button class="x" data-close="order">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">Своё событие под ключ</h2>
+      <div class="sub">// квиз · праздник · корпоратив · день рождения</div>
+      <p class="tx">Проведём мероприятие в нашем фирменном стиле. Берём организацию на себя — вам остаётся прийти и веселиться.</p>
+      <div class="tags"><span>Квиз на заказ</span><span>День рождения</span><span>Корпоратив</span><span>Вечеринка</span></div>
+      <div class="btns">
+        <a class="btn fill" href="https://t.me/SocEvents" target="_blank" rel="noopener">↳ Написать в Телеграм</a>
+        <a class="btn" href="tel:+79247698050">☏ Позвонить</a>
+      </div>
+    </div>
   </div>
-</div></div></section>
 
-<footer><div class="wrap foot-in">
-  <span class="l">SOC° · Локальные события</span>
-  <span>Summer 26 · с 20.07 по 20.08</span>
-  <span>© 2026 SOC</span>
-</div></footer>
+  <div class="win" id="win-contacts" style="top:170px; left:300px; width:460px;">
+    <div class="win-bar"><div class="ttl">contacts.cfg</div><button class="x" data-close="contacts">✕</button></div>
+    <div class="win-body">
+      <h2 class="wt">Контакты</h2>
+      <div class="sub">// на связи 24/7</div>
+      <div class="clist">
+        <a href="https://t.me/SocEvents" target="_blank" rel="noopener"><div><div class="lb">Телеграм-канал</div><div class="vl">t.me/SocEvents</div></div><span>↗</span></a>
+        <a href="tel:+79247698050"><div><div class="lb">Рашид</div><div class="vl">+7 924 769-80-50</div></div><span>↗</span></a>
+        <a href="tel:+79245459393"><div><div class="lb">Алексей</div><div class="vl">+7 924 545-93-93</div></div><span>↗</span></a>
+      </div>
+    </div>
+  </div>
 
+  <div class="win" id="win-terminal" style="top:120px; left:520px; width:560px;">
+    <div class="win-bar"><div class="ttl">terminal — soc@summer26</div><button class="x" data-close="terminal">✕</button></div>
+    <div class="win-body">
+      <div class="term">
+        <div class="term-out" id="termout"></div>
+        <div class="term-in"><span>soc@26:~$</span><input id="termin" autocomplete="off" spellcheck="false" aria-label="Командная строка"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- START MENU -->
+  <div id="menu">
+    <button class="mi" data-open="schedule">▤ Расписание</button>
+    <button class="mi" data-open="about">◉ О нас</button>
+    <button class="mi" data-open="how">↳ Как попасть</button>
+    <button class="mi" data-open="order">✦ Заказать ивент</button>
+    <button class="mi" data-open="contacts">☏ Контакты</button>
+    <button class="mi" data-open="terminal">▮ Терминал</button>
+    <div class="sep"></div>
+    <a class="mi" href="https://forms.gle/AsQCmv5x1JCextg29" target="_blank" rel="noopener">⤓ Записаться на событие</a>
+    <a class="mi" href="https://t.me/SocEvents" target="_blank" rel="noopener">↳ Телеграм-канал</a>
+  </div>
 
+  <!-- TASKBAR -->
+  <div id="bar">
+    <button id="start">▣ SOC</button>
+    <div id="tasks"></div>
+    <div id="clock"><b id="clk">--:--</b><small id="cd">до старта: --</small></div>
+  </div>
+</div>
 
+<div class="crt"></div>
+<div class="flick"></div>
 
-
-
-
-
-
-
-
-<div class="modal" id="modal"><div class="mcard"><button class="mclose" id="mclose">✕</button><div class="mdate" id="mdate"></div><div class="mtitle" id="mtitle"></div><div class="mmeta" id="mmeta"></div><div class="mdesc" id="mdesc"></div><div class="mbtns"><a href="https://forms.gle/AsQCmv5x1JCextg29" target="_blank" class="btn primary">Записаться</a><a href="https://t.me/SocEvents" target="_blank" class="btn ghost">В Телеграм-канал</a></div></div></div>
 <script>
-const glow=document.getElementById('glow');
-let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
-addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
-(function loop(){cx+=(mx-cx)*.38;cy+=(my-cy)*.38;glow.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
-var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.14});
-document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-var EVENTS=[{"date":"20 августа · Чт","name":"Просмотр финала Чм-26","time":"03:00","place":"место в анонсе","desc":"Совместный просмотр финала ЧМ-26. Живые эмоции "}];
-var modal=document.getElementById('modal');var mClose=document.getElementById('mclose');
-function openEv(i){var e=EVENTS[i];if(!e)return;document.getElementById('mdate').textContent=e.date;document.getElementById('mtitle').textContent=e.name;document.getElementById('mmeta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';document.getElementById('mdesc').textContent=e.desc;modal.classList.add('open');}
-function closeEv(){modal.classList.remove('open');}
-document.querySelectorAll('.ev').forEach(function(ev){ev.addEventListener('click',function(){openEv(+ev.dataset.i);});});
-mClose.addEventListener('click',closeEv);
-modal.addEventListener('click',function(e){if(e.target===modal)closeEv();});
-addEventListener('keydown',function(e){if(e.key==='Escape')closeEv();});
+  const EVENTS=[
+    {date:'20 июля · Пн', name:'Тусовка', sub:'открытие сезона', time:'19:00', place:'место в анонсе', hl:true, desc:'Большое открытие сезона Summer 26. Музыка, знакомства и атмосфера старта — задаём настроение на весь месяц.'},
+    {date:'25 июля · Сб', name:'Квиз', sub:'', time:'18:00', place:'место в анонсе', desc:'Командная интеллектуальная игра. Собирай команду 4–6 человек, проверь эрудицию и поборись за приз.'},
+    {date:'30 июля · Чт', name:'Игра', sub:'', time:'19:00', place:'место в анонсе', desc:'Активная городская игра — формат каждый раз новый. Динамично, весело и всегда неожиданно.'},
+    {date:'1 августа · Сб', name:'Киновечер', sub:'', time:'21:00', place:'под открытым небом', desc:'Совместный просмотр кино под открытым небом. Большой экран, плед и хорошая компания.'},
+    {date:'6 августа · Чт', name:'Квиз', sub:'', time:'18:00', place:'место в анонсе', desc:'Ещё один вечер умных вопросов и азартных команд. Реванш для тех, кто хочет взять верх.'},
+    {date:'8 августа · Сб', name:'Опен аир', sub:'', time:'17:00', place:'на свежем воздухе', desc:'Вечеринка на свежем воздухе. Музыка, лето и свои люди — то, ради чего стоит выйти из дома.'},
+    {date:'13 августа · Чт', name:'Игра', sub:'', time:'19:00', place:'место в анонсе', desc:'Новый раунд городской игры. Командный дух, движение и хорошее настроение.'},
+    {date:'15 августа · Сб', name:'Шашлыки', sub:'', time:'15:00', place:'выезд на природу', desc:'Дружеский выезд на природу. Мясо на углях, музыка и общение в кругу своих.'},
+    {date:'20 августа · Чт', name:'Стендап', sub:'', time:'20:00', place:'место в анонсе', hl:true, desc:'Финал сезона — живые выступления комиков. Смеёмся до слёз и провожаем лето с улыбкой.'},
+    {date:'20 августа · Чт', name:'Афтерпати', sub:'', time:'23:00', place:'место в анонсе', hl:true, desc:'Закрытие сезона сразу после стендапа. Танцуем до утра и прощаемся с летом как следует.'}
+  ];
+
+  /* ---------- BOOT ---------- */
+  const blog=document.getElementById('blog'), bbar=document.getElementById('bbar');
+  const lines=[
+    ['SOC_OS v26.0 — загрузка ядра...','dim'],
+    ['[ OK ] монтирование /summer','ok'],
+    ['[ OK ] events.db — найдено 10 событий','ok'],
+    ['[ OK ] звук: ВКЛ · вайб: ВКЛ','ok'],
+    ['[ OK ] проверка настроения... ПРОЙДЕНА','ok'],
+    ['[ OK ] сеть: t.me/SocEvents','ok'],
+    ['','dim'],
+    ['добро пожаловать, user.','ok'],
+    ["пиши 'help' или кликай по иконкам →",'dim']
+  ];
+  let booted=false;
+  function boot(){
+    let i=0;
+    (function next(){
+      if(i>=lines.length){ bbar.style.width='100%'; setTimeout(finishBoot,420); return; }
+      const [t,c]=lines[i];
+      const span=document.createElement('div'); span.className=c; span.textContent=t; blog.appendChild(span);
+      bbar.style.width=Math.round((i+1)/lines.length*100)+'%';
+      i++; setTimeout(next, 230+Math.random()*160);
+    })();
+  }
+  function finishBoot(){
+    if(booted) return; booted=true;
+    document.getElementById('boot').classList.add('hide');
+    const desk=document.getElementById('desk'); desk.classList.add('on');
+    openWin('welcome'); openWin('terminal');
+    termPrint("SOC_OS — введи 'help' для списка команд.", 'pr');
+    setTimeout(()=>document.getElementById('termin').focus(), 400);
+  }
+  document.getElementById('boot').addEventListener('click',finishBoot);
+  addEventListener('keydown',e=>{ if(!booted){ finishBoot(); } });
+
+  /* ---------- WINDOW MANAGER ---------- */
+  let ztop=20;
+  const openOrder=[];
+  function raise(win){ win.style.zIndex=++ztop; }
+  function openWin(id){
+    const win=document.getElementById('win-'+id); if(!win) return;
+    if(!win.classList.contains('open')){
+      win.classList.add('open');
+      if(!openOrder.includes(id)) openOrder.push(id);
+    }
+    raise(win); renderTasks();
+    if(id==='terminal') setTimeout(()=>document.getElementById('termin').focus(),50);
+  }
+  function closeWin(id){
+    const win=document.getElementById('win-'+id); if(!win) return;
+    win.classList.remove('open');
+    const k=openOrder.indexOf(id); if(k>=0) openOrder.splice(k,1);
+    renderTasks();
+  }
+  function renderTasks(){
+    const t=document.getElementById('tasks'); t.innerHTML='';
+    const titles={welcome:'README',schedule:'SCHEDULE',event:'EVENT',about:'ABOUT',how:'HOW',order:'ORDER',contacts:'CONTACTS',terminal:'TERMINAL'};
+    openOrder.forEach(id=>{
+      const b=document.createElement('button'); b.className='tk'; b.textContent=titles[id]||id;
+      b.onclick=()=>openWin(id); t.appendChild(b);
+    });
+  }
+  document.querySelectorAll('[data-open]').forEach(el=>el.addEventListener('click',e=>{ openWin(el.dataset.open); document.getElementById('menu').classList.remove('on'); }));
+  document.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); closeWin(el.dataset.close); }));
+  document.querySelectorAll('.win').forEach(w=>w.addEventListener('mousedown',()=>raise(w)));
+
+  /* dragging */
+  document.querySelectorAll('.win-bar').forEach(bar=>{
+    let sx,sy,ox,oy,drag=false; const win=bar.closest('.win');
+    function down(e){ if(e.target.classList.contains('x')) return; drag=true; bar.classList.add('drag'); raise(win);
+      const p=e.touches?e.touches[0]:e; sx=p.clientX; sy=p.clientY; const r=win.getBoundingClientRect(); ox=r.left; oy=r.top;
+      document.addEventListener('mousemove',move); document.addEventListener('touchmove',move,{passive:false});
+      document.addEventListener('mouseup',up); document.addEventListener('touchend',up); }
+    function move(e){ if(!drag) return; if(e.cancelable) e.preventDefault(); const p=e.touches?e.touches[0]:e;
+      let nx=ox+(p.clientX-sx), ny=oy+(p.clientY-sy);
+      nx=Math.max(-40,Math.min(nx,innerWidth-80)); ny=Math.max(0,Math.min(ny,innerHeight-80));
+      win.style.left=nx+'px'; win.style.top=ny+'px'; }
+    function up(){ drag=false; bar.classList.remove('drag');
+      document.removeEventListener('mousemove',move); document.removeEventListener('touchmove',move);
+      document.removeEventListener('mouseup',up); document.removeEventListener('touchend',up); }
+    bar.addEventListener('mousedown',down); bar.addEventListener('touchstart',down,{passive:true});
+  });
+
+  /* ---------- SCHEDULE + EVENTS ---------- */
+  const evlist=document.getElementById('evlist');
+  EVENTS.forEach((e,i)=>{
+    const row=document.createElement('div'); row.className='evi'+(e.hl?' hl':'');
+    const dd=e.date.split(' · ')[0].split(' ')[0]+'.'+ ( {'июля':'07','августа':'08'}[e.date.split(' ')[1]] || '');
+    row.innerHTML='<div class="d">'+dd+'</div><div class="nm">'+e.name+(e.sub?'<small>'+e.sub+'</small>':'')+'</div><div class="go">→</div>';
+    row.addEventListener('click',()=>openEvent(i));
+    evlist.appendChild(row);
+  });
+  function openEvent(i){
+    const e=EVENTS[i]; if(!e) return;
+    document.getElementById('ev-ttl').textContent='event.exe — '+e.name;
+    document.getElementById('ev-date').textContent='// '+e.date;
+    document.getElementById('ev-name').textContent=e.name;
+    document.getElementById('ev-meta').innerHTML='<span>⏱ '+e.time+'</span><span>📍 '+e.place+'</span>';
+    document.getElementById('ev-desc').textContent=e.desc;
+    openWin('event');
+  }
+
+  /* ---------- TERMINAL ---------- */
+  const out=document.getElementById('termout'), tin=document.getElementById('termin');
+  function termPrint(txt,cls){ const d=document.createElement('div'); if(cls)d.className=cls; d.innerHTML=txt; out.appendChild(d); out.scrollTop=out.scrollHeight; }
+  const HELP=`доступные команды:
+  help            — этот список
+  ls / apps       — список приложений
+  open <app>      — открыть окно (schedule, about, how, order, contacts)
+  schedule        — расписание сезона
+  book            — записаться на событие
+  tg              — наш телеграм
+  call            — телефоны
+  whoami          — кто ты
+  date            — дата и отсчёт
+  clear           — очистить экран`;
+  const hist=[]; let hp=-1;
+  function run(raw){
+    const cmd=raw.trim(); if(!cmd) return;
+    termPrint('<span class="pr">soc@26:~$</span> '+cmd.replace(/</g,'&lt;'));
+    hist.push(cmd); hp=hist.length;
+    const [c,...a]=cmd.toLowerCase().split(/\s+/);
+    switch(c){
+      case 'help': termPrint(HELP); break;
+      case 'ls': case 'apps': termPrint('schedule  about  how  order  contacts  terminal'); break;
+      case 'open':{ const m={schedule:'schedule',about:'about',how:'how',order:'order',contacts:'contacts',terminal:'terminal'}[a[0]];
+        if(m){ openWin(m); termPrint('открываю '+m+'...'); } else termPrint("нет такого приложения: '"+(a[0]||'')+"'. попробуй 'ls'",'er'); break; }
+      case 'schedule': case 'расписание': openWin('schedule'); termPrint('сезон SUMMER_26: 10 событий, 20.07 — 20.08. открыл окно.'); break;
+      case 'about': openWin('about'); termPrint('// открыл about.md'); break;
+      case 'how': openWin('how'); termPrint('// 4 шага до тусовки'); break;
+      case 'order': openWin('order'); termPrint('// заявка на частное мероприятие'); break;
+      case 'contacts': openWin('contacts'); termPrint('// контакты открыты'); break;
+      case 'book': case 'join': case 'записаться': termPrint('форма записи: <a href="https://forms.gle/AsQCmv5x1JCextg29" target="_blank" rel="noopener">forms.gle/AsQCmv5x1JCextg29</a>'); break;
+      case 'tg': case 'telegram': termPrint('телеграм: <a href="https://t.me/SocEvents" target="_blank" rel="noopener">t.me/SocEvents</a>'); break;
+      case 'call': case 'phone': termPrint('Рашид +7 924 769-80-50 · Алексей +7 924 545-93-93'); break;
+      case 'whoami': termPrint('гость, который ещё не записался на лето :)'); break;
+      case 'date': termPrint(new Date().toLocaleString('ru-RU')+'  ·  '+cdText()); break;
+      case 'countdown': termPrint(cdText()); break;
+      case 'sudo': termPrint('правильно, тут все равны. просто приходи 🌿'); break;
+      case 'clear': out.innerHTML=''; break;
+      case 'exit': termPrint('окно нельзя закрыть командой — жми ✕ в углу.'); break;
+      default: termPrint("команда не найдена: '"+c+"'. введи 'help'",'er');
+    }
+  }
+  tin.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){ run(tin.value); tin.value=''; }
+    else if(e.key==='ArrowUp'){ if(hp>0){ hp--; tin.value=hist[hp]||''; } e.preventDefault(); }
+    else if(e.key==='ArrowDown'){ if(hp<hist.length){ hp++; tin.value=hist[hp]||''; } }
+  });
+  document.getElementById('win-terminal').addEventListener('click',()=>tin.focus());
+
+  /* ---------- START MENU ---------- */
+  const startBtn=document.getElementById('start'), menu=document.getElementById('menu');
+  startBtn.addEventListener('click',e=>{ e.stopPropagation(); menu.classList.toggle('on'); });
+  document.addEventListener('click',e=>{ if(!menu.contains(e.target) && e.target!==startBtn) menu.classList.remove('on'); });
+
+  /* ---------- CLOCK + COUNTDOWN ---------- */
+  const target=new Date('2026-07-20T19:00:00').getTime();
+  function cdText(){ let d=target-Date.now(); if(d<0) return 'сезон идёт 🌿'; const days=Math.floor(d/864e5), h=Math.floor(d%864e5/36e5); return 'до старта: '+days+'д '+h+'ч'; }
+  function tick(){
+    const n=new Date();
+    document.getElementById('clk').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    document.getElementById('cd').textContent=cdText();
+  }
+  tick(); setInterval(tick,1000);
+
+  /* ESC closes top window */
+  addEventListener('keydown',e=>{ if(e.key==='Escape' && openOrder.length){ closeWin(openOrder[openOrder.length-1]); } });
+
+  boot();
 </script>
-</body></html>
+</body>
+</html>
